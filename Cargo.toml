@@ -1,0 +1,6 @@
+[package]
+name = "avm_rust"
+version = "0.1.0"
+authors = ["cledant <cledant@student.42.fr>"]
+
+[dependencies]
