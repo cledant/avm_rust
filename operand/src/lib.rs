@@ -1,5 +1,7 @@
 pub mod operand {
 
+extern crate num;
+
 use std::process;
 use std::ops::Add;
 
@@ -11,26 +13,24 @@ use std::ops::Add;
 		Double(f64),
 	}	
 
-	fn overflow_exit() -> Value {
-		println!("Overflow detected ! Exiting !");
-		process::exit(1);
-	}
-
-	fn checked_f32_add (x : f32, y : f32) -> Value {
-		let val = x + y;
-		if val.is_finite() {
-			Value::Float(val)
-		} else {
-			overflow_exit()
+	fn checked_add_integer<T : num::CheckedAdd> (x : T, y : T) -> T {
+		let val = x.checked_add(&y);
+		match val {
+			Some(x) => x,
+			None => {
+				println!("Overflow detected ! Exiting !");
+				process::exit(1)
+			}
 		}
-	}
+	}	
 
-	fn checked_f64_add (x : f64, y : f64) -> Value {
+	fn checked_add_float<T : num::Float> (x : T, y : T) -> T {
 		let val = x + y;
 		if val.is_finite() {
-			Value::Double(val)
+			val
 		} else {
-			overflow_exit()
+			println!("Overflow detected ! Exiting !");
+			process::exit(1)
 		}
 	}
 
@@ -40,120 +40,84 @@ use std::ops::Add;
 		fn add(self, other : Value) -> Value {
 			match (self, other) {
 				//Char
-				(Value::Char(x), Value::Char(y)) => { 
-					let val = x.checked_add(y);
-					match val {
-						Some(x) => Value::Char(x),
-						None => { overflow_exit() },
-					}
+				(Value::Char(x), Value::Char(y)) => {
+					Value::Char(checked_add_integer(x, y))
 				}
-				(Value::Short(x), Value::Char(y)) => { 
-					let val = x.checked_add(y as i16);
-					match val {
-						Some(x) => Value::Short(x),
-						None => { overflow_exit() },
-					}
+				(Value::Short(x), Value::Char(y)) => {
+					Value::Short(checked_add_integer(x, y as i16))
 				}
-				(Value::Int(x), Value::Char(y)) => { 
-					let val = x.checked_add(y as i32);
-					match val {
-						Some(x) => Value::Int(x),
-						None => { overflow_exit() },
-					}
+				(Value::Int(x), Value::Char(y)) => {
+					Value::Int(checked_add_integer(x, y as i32))
 				}
 				(Value::Float(x), Value::Char(y)) => {
-					checked_f32_add(x, y as f32)
+					Value::Float(checked_add_float(x, y as f32))
 				}
 				(Value::Double(x), Value::Char(y)) => {
-					checked_f64_add(x, y as f64)
+					Value::Double(checked_add_float(x, y as f64))
 				}
 				//Short
-				(Value::Char(x), Value::Short(y)) => { 
-					let val = y.checked_add(x as i16);
-					match val {
-						Some(x) => Value::Short(x),
-						None => { overflow_exit() },
-					}
+				(Value::Char(x), Value::Short(y)) => {
+					Value::Short(checked_add_integer(x as i16, y))
 				}
-				(Value::Short(x), Value::Short(y)) => { 
-					let val = x.checked_add(y);
-					match val {
-						Some(x) => Value::Short(x),
-						None => { overflow_exit() },
-					}
+				(Value::Short(x), Value::Short(y)) => {
+					Value::Short(checked_add_integer(x, y))
 				}
-				(Value::Int(x), Value::Short(y)) => { 
-					let val = x.checked_add(y as i32);
-					match val {
-						Some(x) => Value::Int(x),
-						None => { overflow_exit() },
-					}
+				(Value::Int(x), Value::Short(y)) => {
+					Value::Int(checked_add_integer(x, y as i32))
 				}
 				(Value::Float(x), Value::Short(y)) => {
-					checked_f32_add(x, y as f32)
+					Value::Float(checked_add_float(x, y as f32))
 				}
 				(Value::Double(x), Value::Short(y)) => {
-					checked_f64_add(x, y as f64)
+					Value::Double(checked_add_float(x, y as f64))
 				}
 				//Int
-				(Value::Char(x), Value::Int(y)) => { 
-					let val = y.checked_add(x as i32);
-					match val {
-						Some(x) => Value::Int(x),
-						None => { overflow_exit() },
-					}
+				(Value::Char(x), Value::Int(y)) => {
+					Value::Int(checked_add_integer(x as i32, y))
 				}
 				(Value::Short(x), Value::Int(y)) => {
- 					let val = y.checked_add(x as i32);
-					match val {
-						Some(x) => Value::Int(x),
-						None => { overflow_exit() },
-					}
+					Value::Int(checked_add_integer(x as i32, y))
 				}
-				(Value::Int(x), Value::Int(y)) => { 
-					let val = x.checked_add(y);
-					match val {
-						Some(x) => Value::Int(x),
-						None => { overflow_exit() },
-					}
+				(Value::Int(x), Value::Int(y)) => {
+					Value::Int(checked_add_integer(x, y))
 				}
 				(Value::Float(x), Value::Int(y)) => {
-					checked_f32_add(x, y as f32)
+					Value::Float(checked_add_float(x, y as f32))
 				}
 				(Value::Double(x), Value::Int(y)) => {
-					checked_f64_add(x, y as f64)
+					Value::Double(checked_add_float(x, y as f64))
 				}
 				//Float
-				(Value::Char(x), Value::Float(y)) => { 
-					checked_f32_add(x as f32, y)
+				(Value::Char(x), Value::Float(y)) => {
+					Value::Float(checked_add_float(x as f32, y))
 				}
 				(Value::Short(x), Value::Float(y)) => {
-					checked_f32_add(x as f32, y)
+					Value::Float(checked_add_float(x as f32, y))
 				}
-				(Value::Int(x), Value::Float(y)) => { 
-					checked_f32_add(x as f32, y)
+				(Value::Int(x), Value::Float(y)) => {
+					Value::Float(checked_add_float(x as f32, y))
 				}
 				(Value::Float(x), Value::Float(y)) => {
-					checked_f32_add(x, y)
+					Value::Float(checked_add_float(x, y))
 				}
 				(Value::Double(x), Value::Float(y)) => {
-					checked_f64_add(x, y as f64)
+					Value::Double(checked_add_float(x, y as f64))
 				}
 				//Double
-				(Value::Char(x), Value::Double(y)) => { 
-					checked_f64_add(x as f64, y)
+				(Value::Char(x), Value::Double(y)) => {
+					Value::Double(checked_add_float(x as f64, y))
 				}
 				(Value::Short(x), Value::Double(y)) => {
-					checked_f64_add(x as f64, y)
+					Value::Double(checked_add_float(x as f64, y))
 				}
-				(Value::Int(x), Value::Double(y)) => { 
-					checked_f64_add(x as f64, y)
+				(Value::Int(x), Value::Double(y)) => {
+					Value::Double(checked_add_float(x as f64, y))
 				}
 				(Value::Float(x), Value::Double(y)) => {
-					checked_f64_add(x as f64, y)
+					Value::Double(checked_add_float(x as f64, y))
 				}
 				(Value::Double(x), Value::Double(y)) => {
-					checked_f64_add(x, y)
+					Value::Double(checked_add_float(x, y))
 				}
 			}
 		}
