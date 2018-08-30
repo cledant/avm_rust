@@ -3,6 +3,7 @@ pub mod value {
 extern crate num;
 
 use std::ops::Add;
+use std::num::FpCategory;
 
 	#[derive(Debug, PartialEq)]
 	pub enum Type {
@@ -18,10 +19,11 @@ use std::ops::Add;
 	#[inline]
 	fn checked_add_float<T : num::Float> (x : T, y : T) -> Result<T, &'static str> {
 		let val = x + y;
-		if val.is_finite() {
-			Ok(val)
-		} else {
-			Err(ERR_OVERFLOW)
+		match val.classify() {
+			FpCategory::Subnormal => Err(ERR_OVERFLOW),
+			FpCategory::Infinite => Err(ERR_OVERFLOW),
+			FpCategory::Nan => Err(ERR_OVERFLOW),
+			_ => Ok(val),
 		}
 	}
 
