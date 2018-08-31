@@ -14,17 +14,43 @@ use std::num::FpCategory;
 		Double(f64),
 	}	
 
+	enum RetType {
+		Char,
+		Short,
+		Int,
+		Float,
+		Double,
+	}
+
 	pub static ERR_OVERFLOW : &str = "Overflow detected";
+	pub static ERR_IMPOSSIBLE : &str = "Impossible case";
 
 	#[inline]
-	fn checked_add_float<T : num::Float> (x : T, y : T) -> Result<T, &'static str> {
+	fn checked_add_float<T> (x : T, y : T, ret : RetType) -> Result<Type, &'static str> 
+	where T : num::Float + num::cast::ToPrimitive
+	{
 		let val = x + y;
-		match val.classify() {
-			FpCategory::Subnormal => Err(ERR_OVERFLOW),
-			FpCategory::Infinite => Err(ERR_OVERFLOW),
-			FpCategory::Nan => Err(ERR_OVERFLOW),
-			_ => Ok(val),
+		match (val.classify(), ret) {
+			(FpCategory::Subnormal, _) => Err(ERR_OVERFLOW),
+			(FpCategory::Infinite, _) => Err(ERR_OVERFLOW),
+			(FpCategory::Nan, _) => Err(ERR_OVERFLOW),
+			(_, RetType::Float) => Ok(Type::Float(val.to_f32().unwrap())),
+			(_, RetType::Double) => Ok(Type::Double(val.to_f64().unwrap())),
+			(_, _) => Err(ERR_IMPOSSIBLE),
 		}
+	}
+
+	#[inline]
+	fn checked_add_integer<T> (x : T, y : T, ret : RetType) -> Result<Type, &'static str> 
+	where T : num::CheckedAdd + num::cast::ToPrimitive
+	{
+		match (x.checked_add(&y), ret) {
+			(Some(nb) , RetType::Char) => Ok(Type::Char(nb.to_i8().unwrap())),
+			(Some(nb) , RetType::Short) => Ok(Type::Short(nb.to_i16().unwrap())),
+			(Some(nb) , RetType::Int) => Ok(Type::Int(nb.to_i32().unwrap())),
+			(Some(_) , _) => Err(ERR_IMPOSSIBLE),
+			(None, _) => Err(ERR_OVERFLOW),
+		}	
 	}
 
 	impl Add for Type {
@@ -33,160 +59,35 @@ use std::num::FpCategory;
 		fn add(self, other : Type) -> Result<Type, &'static str> {
 			match (self, other) {
 				//Char
-				(Type::Char(x), Type::Char(y)) => {
-					match x.checked_add(y) {
-						Some(nb) => Ok(Type::Char(nb)),
-						None => Err(ERR_OVERFLOW),
-					}
-				}
-				(Type::Short(x), Type::Char(y)) => {
-					match x.checked_add(y as i16) {
-						Some(nb) => Ok(Type::Short(nb)),
-						None => Err(ERR_OVERFLOW),
-					}
-				}
-				(Type::Int(x), Type::Char(y)) => {
-					match x.checked_add(y as i32) {
-						Some(nb) => Ok(Type::Int(nb)),
-						None => Err(ERR_OVERFLOW),
-					}
-				}
-				(Type::Float(x), Type::Char(y)) => {
-					match checked_add_float(x, y as f32) {
-						Ok(nb) => Ok(Type::Float(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Double(x), Type::Char(y)) => {
-					match checked_add_float(x, y as f64) {
-						Ok(nb) => Ok(Type::Double(nb)),
-						Err(e) => Err(e),
-					}
-				}
+				(Type::Char(x), Type::Char(y)) => checked_add_integer(x, y, RetType::Char),
+				(Type::Short(x), Type::Char(y)) => checked_add_integer(x, y as i16, RetType::Short),
+				(Type::Int(x), Type::Char(y)) => checked_add_integer(x, y as i32, RetType::Int),
+				(Type::Float(x), Type::Char(y)) => checked_add_float(x, y as f32, RetType::Float),
+				(Type::Double(x), Type::Char(y)) => checked_add_float(x, y as f64, RetType::Double),
 				//Short
-				(Type::Char(x), Type::Short(y)) => {
-					match y.checked_add(x as i16) {
-						Some(nb) => Ok(Type::Short(nb)),
-						None => Err(ERR_OVERFLOW),
-					}
-				}
-				(Type::Short(x), Type::Short(y)) => {
-					match x.checked_add(y) {
-						Some(nb) => Ok(Type::Short(nb)),
-						None => Err(ERR_OVERFLOW),
-					}
-				}
-				(Type::Int(x), Type::Short(y)) => {
-					match x.checked_add(y as i32) {
-						Some(nb) => Ok(Type::Int(nb)),
-						None => Err(ERR_OVERFLOW),
-					}
-				}
-				(Type::Float(x), Type::Short(y)) => {
-					match checked_add_float(x, y as f32) {
-						Ok(nb) => Ok(Type::Float(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Double(x), Type::Short(y)) => {
-					match checked_add_float(x, y as f64) {
-						Ok(nb) => Ok(Type::Double(nb)),
-						Err(e) => Err(e),
-					}
-				}
+				(Type::Char(x), Type::Short(y)) => checked_add_integer(x as i16, y, RetType::Short),
+				(Type::Short(x), Type::Short(y)) => checked_add_integer(x, y, RetType::Short),
+				(Type::Int(x), Type::Short(y)) => checked_add_integer(x, y as i32, RetType::Int),
+				(Type::Float(x), Type::Short(y)) => checked_add_float(x, y as f32, RetType::Float),
+				(Type::Double(x), Type::Short(y)) => checked_add_float(x, y as f64, RetType::Double),
 				//Int
-				(Type::Char(x), Type::Int(y)) => {
-					match y.checked_add(x as i32) {
-						Some(nb) => Ok(Type::Int(nb)),
-						None => Err(ERR_OVERFLOW),
-					}
-				}
-				(Type::Short(x), Type::Int(y)) => {
-					match y.checked_add(x as i32) {
-						Some(nb) => Ok(Type::Int(nb)),
-						None => Err(ERR_OVERFLOW),
-					}
-				}
-				(Type::Int(x), Type::Int(y)) => {
-					match x.checked_add(y) {
-						Some(nb) => Ok(Type::Int(nb)),
-						None => Err(ERR_OVERFLOW),
-					}
-				}
-				(Type::Float(x), Type::Int(y)) => {
-					match checked_add_float(x, y as f32) {
-						Ok(nb) => Ok(Type::Float(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Double(x), Type::Int(y)) => {
-					match checked_add_float(x, y as f64) {
-						Ok(nb) => Ok(Type::Double(nb)),
-						Err(e) => Err(e),
-					}
-				}
+				(Type::Char(x), Type::Int(y)) => checked_add_integer(x as i32, y, RetType::Int),
+				(Type::Short(x), Type::Int(y)) => checked_add_integer(x as i32, y, RetType::Int),
+				(Type::Int(x), Type::Int(y)) => checked_add_integer(x, y, RetType::Int),
+				(Type::Float(x), Type::Int(y)) => checked_add_float(x, y as f32, RetType::Float),
+				(Type::Double(x), Type::Int(y)) => checked_add_float(x, y as f64, RetType::Double),
 				//Float
-				(Type::Char(x), Type::Float(y)) => {
-					match checked_add_float(x as f32, y) {
-						Ok(nb) => Ok(Type::Float(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Short(x), Type::Float(y)) => {
-					match checked_add_float(x as f32, y) {
-						Ok(nb) => Ok(Type::Float(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Int(x), Type::Float(y)) => {
-					match checked_add_float(x as f32, y) {
-						Ok(nb) => Ok(Type::Float(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Float(x), Type::Float(y)) => {
-					match checked_add_float(x, y) {
-						Ok(nb) => Ok(Type::Float(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Double(x), Type::Float(y)) => {
-					match checked_add_float(x, y as f64) {
-						Ok(nb) => Ok(Type::Double(nb)),
-						Err(e) => Err(e),
-					}
-				}
+				(Type::Char(x), Type::Float(y)) => checked_add_float(x as f32, y, RetType::Float),
+				(Type::Short(x), Type::Float(y)) => checked_add_float(x as f32, y, RetType::Float),
+				(Type::Int(x), Type::Float(y)) => checked_add_float(x as f32, y, RetType::Float),
+				(Type::Float(x), Type::Float(y)) => checked_add_float(x, y, RetType::Float),
+				(Type::Double(x), Type::Float(y)) => checked_add_float(x, y as f64, RetType::Double),
 				//Double
-				(Type::Char(x), Type::Double(y)) => {
-					match checked_add_float(x as f64, y) {
-						Ok(nb) => Ok(Type::Double(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Short(x), Type::Double(y)) => {
-					match checked_add_float(x as f64, y) {
-						Ok(nb) => Ok(Type::Double(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Int(x), Type::Double(y)) => {
-					match checked_add_float(x as f64, y) {
-						Ok(nb) => Ok(Type::Double(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Float(x), Type::Double(y)) => {
-					match checked_add_float(x as f64, y) {
-						Ok(nb) => Ok(Type::Double(nb)),
-						Err(e) => Err(e),
-					}
-				}
-				(Type::Double(x), Type::Double(y)) => {
-					match checked_add_float(x, y) {
-						Ok(nb) => Ok(Type::Double(nb)),
-						Err(e) => Err(e),
-					}
-				}
+				(Type::Char(x), Type::Double(y)) => checked_add_float(x as f64, y, RetType::Double),
+				(Type::Short(x), Type::Double(y)) => checked_add_float(x as f64, y, RetType::Double),
+				(Type::Int(x), Type::Double(y)) => checked_add_float(x as f64, y, RetType::Double),
+				(Type::Float(x), Type::Double(y)) => checked_add_float(x as f64, y, RetType::Double),
+				(Type::Double(x), Type::Double(y)) => checked_add_float(x, y, RetType::Double),
 			}
 		}
 	}
