@@ -1,5 +1,5 @@
 [package]
-name = "operand"
+name = "value"
 version = "0.1.0"
 authors = ["cledant <cledant@student.42.fr>"]
 
