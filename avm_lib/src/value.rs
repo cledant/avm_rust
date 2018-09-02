@@ -38,6 +38,12 @@ use std::num::FpCategory;
 	pub static ERR_MOD_0 : &str = "Modulo by 0 or too small number";
 	pub static ERR_NAN : &str = "Float result is not a number";
 
+	impl Type {
+		pub fn print(&self) {
+			println!("{:?}", self)
+		}
+	}
+
 	#[inline]
 	fn checked_op_float<T> (x : T, y : T, ret : RetType, op : OpType) -> Result<Type, &'static str> 
 	where T : num::Float + num::cast::ToPrimitive
