@@ -1,6 +1,6 @@
-extern crate operand;
+extern crate avm_lib;
 
-use operand::value::Type;
+use avm_lib::value::Type;
 
 //From Char
 #[test]

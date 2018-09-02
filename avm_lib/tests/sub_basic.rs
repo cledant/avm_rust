@@ -1,6 +1,7 @@
-extern crate operand;
+extern crate avm_lib;
 
-use operand::value::Type;
+use avm_lib::value;
+use avm_lib::value::Type;
 
 //Char
 #[test]
@@ -10,7 +11,7 @@ fn operand_sub_char_ok() {
 
 #[test]
 fn operand_sub_char_failed() {
-	assert_eq!(Err(operand::value::ERR_OVERFLOW), Type::Char(-100) - Type::Char(100));
+	assert_eq!(Err(value::ERR_OVERFLOW), Type::Char(-100) - Type::Char(100));
 }
 
 //Short
@@ -21,7 +22,7 @@ fn operand_sub_short_ok() {
 
 #[test]
 fn operand_sub_short_failed() {
-	assert_eq!(Err(operand::value::ERR_OVERFLOW), Type::Short(-5000) - Type::Short(30000));
+	assert_eq!(Err(value::ERR_OVERFLOW), Type::Short(-5000) - Type::Short(30000));
 }
 
 //Int
@@ -32,7 +33,7 @@ fn operand_sub_int_ok() {
 
 #[test]
 fn operand_sub_int_failed() {
-	assert_eq!(Err(operand::value::ERR_OVERFLOW), Type::Int(-2000000000) - Type::Int(2000000000));
+	assert_eq!(Err(value::ERR_OVERFLOW), Type::Int(-2000000000) - Type::Int(2000000000));
 }
 
 //Float
@@ -43,7 +44,7 @@ fn operand_sub_float_ok() {
 
 #[test]
 fn operand_sub_float_failed() {
-	assert_eq!(Err(operand::value::ERR_OVERFLOW), Type::Float(std::f32::MIN) - Type::Float(std::f32::MAX));
+	assert_eq!(Err(value::ERR_OVERFLOW), Type::Float(std::f32::MIN) - Type::Float(std::f32::MAX));
 }
 
 //Double
@@ -54,5 +55,5 @@ fn operand_sub_double_ok() {
 
 #[test]
 fn operand_sub_double_failed() {
-	assert_eq!(Err(operand::value::ERR_OVERFLOW), Type::Double(std::f64::MIN) - Type::Double(std::f64::MAX));
+	assert_eq!(Err(value::ERR_OVERFLOW), Type::Double(std::f64::MIN) - Type::Double(std::f64::MAX));
 }

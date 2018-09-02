@@ -1,5 +1,3 @@
-pub mod value {
-
 extern crate num;
 
 use std::ops::Add;
@@ -282,4 +280,3 @@ use std::num::FpCategory;
 			}
 		}
 	}
-}

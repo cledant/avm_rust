@@ -1,6 +1,7 @@
-extern crate operand;
+extern crate avm_lib;
 
-use operand::value::Type;
+use avm_lib::value;
+use avm_lib::value::Type;
 
 //Char
 #[test]
@@ -10,7 +11,7 @@ fn operand_rem_char_ok() {
 
 #[test]
 fn operand_rem_0_char_failed() {
-	assert_eq!(Err(operand::value::ERR_MOD_0), Type::Char(50) % Type::Char(0));
+	assert_eq!(Err(value::ERR_MOD_0), Type::Char(50) % Type::Char(0));
 }
 
 //Short
@@ -21,7 +22,7 @@ fn operand_rem_short_ok() {
 
 #[test]
 fn operand_rem_0_short_failed() {
-	assert_eq!(Err(operand::value::ERR_MOD_0), Type::Short(10000) % Type::Short(0));
+	assert_eq!(Err(value::ERR_MOD_0), Type::Short(10000) % Type::Short(0));
 }
 
 //Int
@@ -32,7 +33,7 @@ fn operand_rem_int_ok() {
 
 #[test]
 fn operand_rem_0_int_failed() {
-	assert_eq!(Err(operand::value::ERR_MOD_0), Type::Int(2000000000) % Type::Int(0));
+	assert_eq!(Err(value::ERR_MOD_0), Type::Int(2000000000) % Type::Int(0));
 }
 
 //Float
@@ -43,7 +44,7 @@ fn operand_rem_float_ok() {
 
 #[test]
 fn operand_rem_0_float_failed() {
-	assert_eq!(Err(operand::value::ERR_NAN), Type::Float(std::f32::MAX) % Type::Float(0.0));
+	assert_eq!(Err(value::ERR_NAN), Type::Float(std::f32::MAX) % Type::Float(0.0));
 }
 
 //Double
@@ -54,5 +55,5 @@ fn operand_rem_double_ok() {
 
 #[test]
 fn operand_rem_0_double_failed() {
-	assert_eq!(Err(operand::value::ERR_NAN), Type::Double(10000.0) % Type::Double(0.0));
+	assert_eq!(Err(value::ERR_NAN), Type::Double(10000.0) % Type::Double(0.0));
 }

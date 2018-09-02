@@ -1,6 +1,7 @@
-extern crate operand;
+extern crate avm_lib;
 
-use operand::value::Type;
+use avm_lib::value;
+use avm_lib::value::Type;
 
 //Char
 #[test]
@@ -10,7 +11,7 @@ fn operand_div_char_ok() {
 
 #[test]
 fn operand_div_0_char_failed() {
-	assert_eq!(Err(operand::value::ERR_DIV_0), Type::Char(50) / Type::Char(0));
+	assert_eq!(Err(value::ERR_DIV_0), Type::Char(50) / Type::Char(0));
 }
 
 //Short
@@ -21,7 +22,7 @@ fn operand_div_short_ok() {
 
 #[test]
 fn operand_div_0_short_failed() {
-	assert_eq!(Err(operand::value::ERR_DIV_0), Type::Short(10000) / Type::Short(0));
+	assert_eq!(Err(value::ERR_DIV_0), Type::Short(10000) / Type::Short(0));
 }
 
 //Int
@@ -32,7 +33,7 @@ fn operand_div_int_ok() {
 
 #[test]
 fn operand_div_0_int_failed() {
-	assert_eq!(Err(operand::value::ERR_DIV_0), Type::Int(2000000000) / Type::Int(0));
+	assert_eq!(Err(value::ERR_DIV_0), Type::Int(2000000000) / Type::Int(0));
 }
 
 //Float
@@ -43,12 +44,12 @@ fn operand_div_float_ok() {
 
 #[test]
 fn operand_div_0_float_failed() {
-	assert_eq!(Err(operand::value::ERR_DIV_0), Type::Float(std::f32::MAX) / Type::Float(0.0));
+	assert_eq!(Err(value::ERR_DIV_0), Type::Float(std::f32::MAX) / Type::Float(0.0));
 }
 
 #[test]
 fn operand_div_overflow_float_failed() {
-	assert_eq!(Err(operand::value::ERR_DIV_0), Type::Float(1.0e+20_f32) / Type::Float(1.0e-20_f32));
+	assert_eq!(Err(value::ERR_DIV_0), Type::Float(1.0e+20_f32) / Type::Float(1.0e-20_f32));
 }
 
 //Double
@@ -59,10 +60,10 @@ fn operand_div_double_ok() {
 
 #[test]
 fn operand_div_0_double_failed() {
-	assert_eq!(Err(operand::value::ERR_DIV_0), Type::Double(10000.0) / Type::Double(0.0));
+	assert_eq!(Err(value::ERR_DIV_0), Type::Double(10000.0) / Type::Double(0.0));
 }
 
 #[test]
 fn operand_div_overflow_double_failed() {
-	assert_eq!(Err(operand::value::ERR_DIV_0), Type::Double(1.0e+300_f64) / Type::Double(1.0e-300_f64));
+	assert_eq!(Err(value::ERR_DIV_0), Type::Double(1.0e+300_f64) / Type::Double(1.0e-300_f64));
 }
