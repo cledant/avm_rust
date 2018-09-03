@@ -34,6 +34,24 @@ fn stack_push() {
 }
 
 #[test]
+fn stack_failed_pop() {
+	//Init
+	let mut stack : stack::Stack = stack::Stack::new();
+	let mut vec_tok : Vec<Token> = Vec::new();
+	let tok = Token {val : None,
+			inst : Some(instruction::pop),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::exit),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	//Test
+	assert_eq!(ExecState::Error(instruction::ERR_EMPTY_STACK),
+		stack.run(&mut vec_tok));
+}
+
+#[test]
 fn stack_failed_assert_1() {
 	//Init
 	let mut stack : stack::Stack = stack::Stack::new();
@@ -104,6 +122,35 @@ fn stack_dump() {
 	vec_tok.push(tok);
 	let tok = Token {val : None,
 			inst : Some(instruction::dump),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::exit),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	//Test
+	assert_eq!(ExecState::Stop, stack.run(&mut vec_tok));
+}
+
+#[test]
+fn stack_pop() {
+	//Init
+	let mut stack : stack::Stack = stack::Stack::new();
+	let mut vec_tok : Vec<Token> = Vec::new();
+	let tok = Token {val : Some(Type::Char(10)),
+			inst : Some(instruction::push),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : Some(Type::Short(20)),
+			inst : Some(instruction::push),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::pop),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : Some(Type::Char(10)),
+			inst : Some(instruction::assert),
 			line : String::from("empty") , line_number : 0};
 	vec_tok.push(tok);
 	let tok = Token {val : None,
@@ -257,4 +304,84 @@ fn stack_rem_assert() {
 	vec_tok.push(tok);
 	//Test
 	assert_eq!(ExecState::Stop, stack.run(&mut vec_tok));
+}
+
+#[test]
+fn stack_print_1() {
+	//Init
+	let mut stack : stack::Stack = stack::Stack::new();
+	let mut vec_tok : Vec<Token> = Vec::new();
+	let tok = Token {val : Some(Type::Char(82)),
+			inst : Some(instruction::push),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::print),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : Some(Type::Char(101)),
+			inst : Some(instruction::push),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::print),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::exit),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	//Test
+	assert_eq!(ExecState::Stop, stack.run(&mut vec_tok));
+}
+
+#[test]
+fn stack_print_2() {
+	//Init
+	let mut stack : stack::Stack = stack::Stack::new();
+	let mut vec_tok : Vec<Token> = Vec::new();
+	let tok = Token {val : Some(Type::Char(10)),
+			inst : Some(instruction::push),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::print),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : Some(Type::Char(127)),
+			inst : Some(instruction::push),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::print),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::exit),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	//Test
+	assert_eq!(ExecState::Stop, stack.run(&mut vec_tok));
+}
+
+#[test]
+fn stack_failed_print() {
+	//Init
+	let mut stack : stack::Stack = stack::Stack::new();
+	let mut vec_tok : Vec<Token> = Vec::new();
+	let tok = Token {val : Some(Type::Short(42)),
+			inst : Some(instruction::push),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::print),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	let tok = Token {val : None,
+			inst : Some(instruction::exit),
+			line : String::from("empty") , line_number : 0};
+	vec_tok.push(tok);
+	//Test
+	assert_eq!(ExecState::Error(instruction::ERR_NOT_CHAR_TYPE),
+		stack.run(&mut vec_tok));
 }
