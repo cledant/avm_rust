@@ -40,7 +40,13 @@ use std::num::FpCategory;
 
 	impl Type {
 		pub fn print(&self) {
-			println!("{:?}", self)
+			match self {
+				Type::Char(x) => println!("{:?}", x),
+				Type::Short(x) => println!("{:?}", x),
+				Type::Int(x) => println!("{:?}", x),
+				Type::Float(x) => println!("{:?}", x),
+				Type::Double(x) => println!("{:?}", x),
+			}
 		}
 	}
 

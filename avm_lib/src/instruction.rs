@@ -53,7 +53,7 @@ pub fn assert (val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack:
 pub fn add (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::ExecState {
 	match (vec.pop(), vec.pop()) {
 		(Some(x), Some(y)) => {
-			match  x + y {
+			match  y + x {
 				Ok(val) => { 
 					vec.push(val);
 					ExecState::Continue
@@ -70,7 +70,7 @@ pub fn add (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::E
 pub fn sub (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::ExecState {
 	match (vec.pop(), vec.pop()) {
 		(Some(x), Some(y)) => {
-			match  x - y {
+			match  y - x {
 				Ok(val) => { 
 					vec.push(val);
 					ExecState::Continue
@@ -87,7 +87,7 @@ pub fn sub (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::E
 pub fn mul (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::ExecState {
 	match (vec.pop(), vec.pop()) {
 		(Some(x), Some(y)) => {
-			match  x * y {
+			match  y * x {
 				Ok(val) => { 
 					vec.push(val);
 					ExecState::Continue
@@ -104,7 +104,7 @@ pub fn mul (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::E
 pub fn div (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::ExecState {
 	match (vec.pop(), vec.pop()) {
 		(Some(x), Some(y)) => {
-			match  x / y {
+			match  y / x {
 				Ok(val) => { 
 					vec.push(val);
 					ExecState::Continue
@@ -121,7 +121,7 @@ pub fn div (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::E
 pub fn rem (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::ExecState {
 	match (vec.pop(), vec.pop()) {
 		(Some(x), Some(y)) => {
-			match  x % y {
+			match  y % x {
 				Ok(val) => { 
 					vec.push(val);
 					ExecState::Continue
