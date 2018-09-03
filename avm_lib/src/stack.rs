@@ -4,6 +4,7 @@ use value;
 pub static ERR_INVALID_TOKEN : &str = "Invalid Token";
 pub static ERR_NO_EXIT_INST : &str = "No Exit Instruction";
 
+#[derive(Debug, PartialEq)]
 pub enum ExecState {
 	Continue,
 	Stop,
@@ -15,25 +16,30 @@ pub struct Stack {
 }
 
 impl Stack {
-	pub fn run(&mut self, entry : &mut Vec<parser::Token>) {
-		while let Some(token) = entry.pop() {
+	pub fn new() -> Stack {
+		Stack {vec_value : Vec::new() }
+	}
+
+	pub fn run(&mut self, entry : &Vec<parser::Token>) -> ExecState {
+		for token in entry.iter() {
 			match token.inst {
 				Some(fct) => {
-					match fct(token.val, &mut self.vec_value) {
+					match fct(token.val.clone(),
+							&mut self.vec_value) {
 						ExecState::Error(e) => {
-							println!("Error : {:?}", e);
-							return;
+							return ExecState::Error(e);
 						}
-						ExecState::Stop => { return; }
+						ExecState::Stop => {
+							return ExecState::Stop;
+						}
 						ExecState::Continue => {}
 					}
 				}
 				None => { 
-					println!("Error : {:?}", ERR_INVALID_TOKEN);
-					return;
+					return ExecState::Error(ERR_INVALID_TOKEN);
 				}
 			};
 		}
-		println!("Error : {:?}", ERR_NO_EXIT_INST);	
+		ExecState::Error(ERR_NO_EXIT_INST)
 	}
 }

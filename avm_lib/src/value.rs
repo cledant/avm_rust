@@ -7,7 +7,7 @@ use std::ops::Div;
 use std::ops::Rem;
 use std::num::FpCategory;
 
-	#[derive(Debug, PartialEq)]
+	#[derive(Clone, Debug, PartialEq)]
 	pub enum Type {
 		Char(i8),
 		Short(i16),
