@@ -1,6 +1,7 @@
 use value;
 use stack;
 use stack::ExecState;
+use std::io::{self, Write};
 
 pub static ERR_EMPTY_STACK : &str = "Stack is empty";
 pub static ERR_FAILED_ASSERT : &str = "Stack top value if different from assert";
@@ -139,9 +140,9 @@ pub fn print (_val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack:
 	match vec.last() {
 		Some(value) => {
 			if let value::Type::Char(c) = value {
-				let cvrt = *c as u8 as char;
-				if !cvrt.is_ascii_control() {
-					print!("{:?}", cvrt);
+				let cvrt : [u8; 1] = [*c as u8; 1];
+				if !cvrt[0].is_ascii_control() {
+					io::stdout().write(&cvrt).unwrap();
 				}
 				ExecState::Continue
 			} else {
