@@ -8,12 +8,21 @@ pub struct Token {
 	pub line_number : i64,
 }
 
-pub struct Parser {
-	vec_token : Vec<Token>,
+fn check_tokens_validity(_vec : &Vec<Token>) -> bool {
+	true
 }
 
-impl Parser {
-	pub fn new() -> Parser {
-		Parser { vec_token : Vec::new() }
+pub fn parse_from_file(file : &String) -> Option<Vec<Token>> {
+	println!("{:?}", file);
+	let vec : Vec<Token> = Vec::new();
+	match check_tokens_validity(&vec) {
+		true => Some(vec),
+		false => None,
 	}
+}
+
+pub fn parse_from_stdin() -> Vec<Token> {
+	println!("From stdin");
+	let vec : Vec<Token> = Vec::new();
+	vec
 }

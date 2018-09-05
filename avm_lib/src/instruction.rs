@@ -3,10 +3,10 @@ use stack;
 use stack::ExecState;
 use std::io::{self, Write};
 
-pub static ERR_EMPTY_STACK : &str = "Stack is empty";
-pub static ERR_FAILED_ASSERT : &str = "Stack top value if different from assert";
-pub static ERR_IMPOSSIBLE : &str = "Impossible case happend";
-pub static ERR_NOT_CHAR_TYPE : &str = "Value to print is not an Int8";
+pub static ERR_EMPTY_STACK : &str = "Runtime error : Stack is empty";
+pub static ERR_FAILED_ASSERT : &str = "Runtime error : Stack top value if different from assert";
+pub static ERR_IMPOSSIBLE : &str = "Runtime error : Impossible case happend";
+pub static ERR_NOT_CHAR_TYPE : &str = "Runtime error : Value to print is not an Int8";
 
 #[inline]
 pub fn push (val : Option<value::Type>, vec : &mut Vec<value::Type>) -> stack::ExecState {

@@ -32,11 +32,11 @@ use std::num::FpCategory;
 		Rem,
 	}
 
-	pub static ERR_OVERFLOW : &str = "Overflow detected";
-	pub static ERR_IMPOSSIBLE : &str = "Impossible case";
-	pub static ERR_DIV_0 : &str = "Divided by 0 or too small number";
-	pub static ERR_MOD_0 : &str = "Modulo by 0 or too small number";
-	pub static ERR_NAN : &str = "Float result is not a number";
+	pub static ERR_OVERFLOW : &str = "Runtime error : Overflow detected";
+	pub static ERR_IMPOSSIBLE : &str = "Runtime error : Should not happend case";
+	pub static ERR_DIV_0 : &str = "Runtime error : Divided by 0 or too small number";
+	pub static ERR_MOD_0 : &str = "Runtime error : Modulo by 0 or too small number";
+	pub static ERR_NAN : &str = "Runtime error : Float result is not a number";
 
 	impl Type {
 		pub fn print(&self) {

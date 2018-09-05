@@ -1,8 +1,8 @@
 use parser;
 use value;
 
-pub static ERR_INVALID_TOKEN : &str = "Invalid Token";
-pub static ERR_NO_EXIT_INST : &str = "No Exit Instruction";
+pub static ERR_INVALID_TOKEN : &str = "Runtime error : Invalid Token";
+pub static ERR_NO_EXIT_INST : &str = "Runtime error : No Exit Instruction";
 
 #[derive(Debug, PartialEq)]
 pub enum ExecState {
