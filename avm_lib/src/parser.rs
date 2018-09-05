@@ -1,5 +1,8 @@
 use value;
 use stack;
+use std::fs;
+
+pub static ERR_OPEN_FILE : &str = "Failed to read file";
 
 pub struct Token {
 	pub val : Option<value::Type>,
@@ -8,16 +11,19 @@ pub struct Token {
 	pub line_number : i64,
 }
 
-fn check_tokens_validity(_vec : &Vec<Token>) -> bool {
-	true
+fn generate_tokens(content : String) -> Option<Vec<Token>> {
+	let splited : Vec<_> = content.split('\n').collect();
+	println!("Number of lines : {}", splited.len());
+	Some(Vec::new())
 }
 
 pub fn parse_from_file(file : &String) -> Option<Vec<Token>> {
-	println!("{:?}", file);
-	let vec : Vec<Token> = Vec::new();
-	match check_tokens_validity(&vec) {
-		true => Some(vec),
-		false => None,
+	match fs::read_to_string(file) {
+		Ok(s) => generate_tokens(s),
+		Err(_) => {
+			println!("File : {} : {}", file, ERR_OPEN_FILE);
+			None
+		},
 	}
 }
 
