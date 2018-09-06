@@ -1,5 +1,5 @@
 push int32(21)
-push int32(21)
+push		int32(21)
 add
 
 ;Should be 42

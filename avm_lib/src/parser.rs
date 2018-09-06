@@ -21,25 +21,32 @@ fn are_tokens_corrects(_vec_tok : &Vec<Token>, _filename : &String) -> bool {
 fn generate_token(line : &str, line_nb : &u64) -> Token {
 	let string_line = String::from(line);
 	let mut splited_line = string_line.split_whitespace();
-	println!("Line {} : ", line_nb);
-	while let Some(word) =  splited_line.next() {
-		println!("{} ", word)
-	}
-	println!("");
-	Token {	val : None,
-		inst : Some(instruction::exit),
-		line : String::from("Toto"),
+	let mut tok = Token {
+		val : None,
+		inst : None,
+		line : String::from(line),
 		line_number : *line_nb,
-	}
+	};
+	while let Some(_word) =  splited_line.next() {
+		match (&tok.inst, &tok.val) {
+			(_, _) => {
+				tok.inst = Some(instruction::exit);
+			},
+		}
+	};
+	tok
 }
 
 #[inline]
 fn generate_vec_token(content : &String, filename : &String) -> Option<Vec<Token>> {
-	let splited_file : Vec<_> = content.split('\n').collect();
+	let mut splited_file = content.lines();
 	let mut vec_tok : Vec<Token> = Vec::new();
 	let mut line_nb : u64 = 1;
-	for line_tok in splited_file.iter() {
-		vec_tok.push(generate_token(&line_tok, &line_nb));
+	while let Some(line) = splited_file.next() {
+		match (line.len(), generate_token(&line, &line_nb)) {
+			(0, _) => {},
+			(_, tok) => vec_tok.push(tok),
+		}
 		line_nb = line_nb + 1;
 	}
 	match are_tokens_corrects(&vec_tok, &filename) {
