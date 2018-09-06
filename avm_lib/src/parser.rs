@@ -1,5 +1,6 @@
 use value;
 use stack;
+use instruction;
 use std::fs;
 
 pub static ERR_OPEN_FILE : &str = "Failed to read file";
@@ -8,18 +9,48 @@ pub struct Token {
 	pub val : Option<value::Type>,
 	pub inst : Option<fn(Option<value::Type>, &mut Vec<value::Type>) -> stack::ExecState>,
 	pub line : String,
-	pub line_number : i64,
+	pub line_number : u64,
 }
 
-fn generate_tokens(content : String) -> Option<Vec<Token>> {
-	let splited : Vec<_> = content.split('\n').collect();
-	println!("Number of lines : {}", splited.len());
-	Some(Vec::new())
+#[inline]
+fn are_tokens_corrects(_vec_tok : &Vec<Token>, _filename : &String) -> bool {
+	true
+}
+
+#[inline]
+fn generate_token(line : &str, line_nb : &u64) -> Token {
+	let string_line = String::from(line);
+	let mut splited_line = string_line.split_whitespace();
+	println!("Line {} : ", line_nb);
+	while let Some(word) =  splited_line.next() {
+		println!("{} ", word)
+	}
+	println!("");
+	Token {	val : None,
+		inst : Some(instruction::exit),
+		line : String::from("Toto"),
+		line_number : *line_nb,
+	}
+}
+
+#[inline]
+fn generate_vec_token(content : &String, filename : &String) -> Option<Vec<Token>> {
+	let splited_file : Vec<_> = content.split('\n').collect();
+	let mut vec_tok : Vec<Token> = Vec::new();
+	let mut line_nb : u64 = 1;
+	for line_tok in splited_file.iter() {
+		vec_tok.push(generate_token(&line_tok, &line_nb));
+		line_nb = line_nb + 1;
+	}
+	match are_tokens_corrects(&vec_tok, &filename) {
+		true => Some(vec_tok),
+		false => None,
+	}
 }
 
 pub fn parse_from_file(file : &String) -> Option<Vec<Token>> {
 	match fs::read_to_string(file) {
-		Ok(s) => generate_tokens(s),
+		Ok(s) => generate_vec_token(&s, &file),
 		Err(_) => {
 			println!("File : {} : {}", file, ERR_OPEN_FILE);
 			None
