@@ -14,20 +14,12 @@ pub enum ExecState {
 pub fn run(entry : &Vec<parser::Token>) -> ExecState {
 	let mut vec_value : Vec<Type> = Vec::new();
 	for token in entry.iter() {
-		match token.inst {
-			Some(fct) => {
-				match fct(token.val.clone(),
-						&mut vec_value) {
-					ExecState::Error(e) => {
-						return ExecState::Error(e);
-					}
-					ExecState::Stop => {
-						return ExecState::Stop;
-					}
-					ExecState::Continue => {}
-				}
+		if let Some(fct) = token.inst {
+			match fct(token.val.clone(), &mut vec_value) {
+				ExecState::Error(e) => return ExecState::Error(e),
+				ExecState::Stop => return ExecState::Stop,
+				ExecState::Continue => {}
 			}
-			None => {} 
 		};
 	}
 	ExecState::Error(ERR_NO_EXIT_INST)
