@@ -5,11 +5,20 @@ use std::fs;
 
 pub static ERR_OPEN_FILE : &str = "Failed to read file";
 
+#[derive(Debug, PartialEq)]
+pub enum ErrorType {
+	Err_Inst,
+	Err_Inst_Lexical,
+	Err_Value_Type,
+	Err_Value_Syntax,
+}
+
 pub struct Token {
 	pub val : Option<value::Type>,
 	pub inst : Option<fn(Option<value::Type>, &mut Vec<value::Type>) -> stack::ExecState>,
 	pub line : String,
 	pub line_number : u64,
+	pub vec_error : Vec<ErrorType>,
 }
 
 #[inline]
@@ -18,22 +27,64 @@ fn are_tokens_corrects(_vec_tok : &Vec<Token>, _filename : &String) -> bool {
 }
 
 #[inline]
+fn parse_instruction (s : &String) -> Result<fn(Option<value::Type>, &mut Vec<value::Type>) -> stack::ExecState, ErrorType> {
+	match s.as_ref() {
+		"push" => Ok(instruction::push),
+		"pop" => Ok(instruction::pop),
+		"dump" => Ok(instruction::dump),
+		"assert" => Ok(instruction::assert),
+		"add" => Ok(instruction::add),
+		"sub" => Ok(instruction::sub),
+		"mul" => Ok(instruction::mul),
+		"div" => Ok(instruction::div),
+		"mod" => Ok(instruction::rem),
+		"print" => Ok(instruction::print),
+		"exit" => Ok(instruction::exit),
+		_ => Err(ErrorType::Err_Inst),
+	}
+}
+
+fn parse_value (s : &String) -> Result<value::Type, ErrorType> {
+	Ok(value::Type::Int(42))
+}
+
+#[inline]
 fn generate_token(line : &str, line_nb : &u64) -> Token {
-	let string_line = String::from(line);
-	let mut splited_line = string_line.split_whitespace();
 	let mut tok = Token {
 		val : None,
 		inst : None,
 		line : String::from(line),
 		line_number : *line_nb,
+		vec_error : Vec::new(),
 	};
-	while let Some(_word) =  splited_line.next() {
-		match (&tok.inst, &tok.val) {
-			(_, _) => {
-				tok.inst = Some(instruction::exit);
-			},
+
+	//setup line to be parsed
+	let v_str : Vec<&str> = line.trim().split(";;").collect();
+	let mut iter = v_str[0].split_whitespace();
+	let mut vec_splited : Vec<String> = Vec::new(); 
+	while let Some(word) =  iter.next() {
+		vec_splited.push(String::from(word));
+	};
+
+	 match vec_splited.len() {
+		0 => { return tok; },
+		1 => {
+				match parse_instruction(&vec_splited[0]) {
+					Ok(inst) => tok.inst = Some(inst),
+					Err(e) => tok.vec_error.push(e),
+				}
 		}
-	};
+		_ => {
+				match parse_instruction(&vec_splited[0]) {
+					Ok(inst) => tok.inst = Some(inst),
+					Err(e) => tok.vec_error.push(e),
+				}
+				match parse_value(&vec_splited[1]) {
+					Ok(val) => tok.val = Some(val),
+					Err(e) => tok.vec_error.push(e),
+				}
+		}
+	}
 	tok
 }
 

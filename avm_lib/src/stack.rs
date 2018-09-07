@@ -27,9 +27,7 @@ pub fn run(entry : &Vec<parser::Token>) -> ExecState {
 					ExecState::Continue => {}
 				}
 			}
-			None => { 
-				return ExecState::Error(ERR_INVALID_TOKEN);
-			}
+			None => {} 
 		};
 	}
 	ExecState::Error(ERR_NO_EXIT_INST)
