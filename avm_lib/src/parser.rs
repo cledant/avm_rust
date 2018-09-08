@@ -3,15 +3,11 @@ use stack;
 use instruction;
 use std::fs;
 
-pub static ERR_OPEN_FILE : &str = "Failed to read file";
-
-#[derive(Debug, PartialEq)]
-pub enum ParserError {
-	ErrInst,
-	ErrInstLexical,
-	ErrValueType,
-	ErrValueSyntax,
-}
+pub static ERR_OPEN_FILE : &str = "IO Error : Failed to read file";
+pub static ERR_INST : &str = "Syntax Error : Invalid Instruction";
+pub static ERR_INST_LEXICAL : &str = "Lexical Error : Invalid Instruction Pattern";
+pub static ERR_VALUE_TYPE : &str = "Syntax Error : Invalid Value Type";
+pub static ERR_VALUE_SYNTAX : &str = "Syntax Error : Invalid Value";
 
 enum ValType {
 	Char,
@@ -33,25 +29,27 @@ pub struct Token {
 	pub inst : Option<fn(Option<value::Type>, &mut Vec<value::Type>) -> stack::ExecState>,
 	pub line : String,
 	pub line_number : u64,
-	pub vec_error : Vec<ParserError>,
+	pub vec_error : Vec<&'static str>,
 }
 
 #[inline]
 fn are_tokens_corrects(vec_tok : &mut Vec<Token>, filename : &String) -> bool {
 	//checks correct association of value and instruction	
 	for tok in vec_tok.iter_mut() {
-		if tok.vec_error.contains(&ParserError::ErrInstLexical)  == true {
+		if tok.vec_error.contains(&ERR_INST_LEXICAL)  == true {
 			continue;
 		}
 		match (tok.inst, &tok.val) {
 			(Some(inst), None) => {
-				if (inst as usize == instruction::push as usize) || (inst as usize == instruction::assert as usize) {
-					tok.vec_error.push(ParserError::ErrInstLexical);
+				if (inst as usize == instruction::push as usize) ||
+					(inst as usize == instruction::assert as usize) {
+						tok.vec_error.push(ERR_INST_LEXICAL);
 				};
 			}
 			(Some(inst), Some(_)) => {
-				if (inst as usize != instruction::push as usize) && (inst as usize != instruction::assert as usize) {
-					tok.vec_error.push(ParserError::ErrInstLexical);
+				if (inst as usize != instruction::push as usize) &&
+					(inst as usize != instruction::assert as usize) {
+						tok.vec_error.push(ERR_INST_LEXICAL);
 				};
 			}
 			(_, _) => {}
@@ -63,16 +61,14 @@ fn are_tokens_corrects(vec_tok : &mut Vec<Token>, filename : &String) -> bool {
 		for e in tok.vec_error.iter() {
 			is_correct = false;
 			println!("Error In file : {} at line {}\n\t{}", filename, tok.line_number, tok.line);
-			match e {
-				_ => println!("=> Shit happend"),
-			};
+			println!("=> {}", e);
 		}
 	}
 	is_correct
 }
 
 #[inline]
-fn parse_instruction (s : &String) -> Result<fn(Option<value::Type>, &mut Vec<value::Type>) -> stack::ExecState, ParserError> {
+fn parse_instruction (s : &String) -> Result<fn(Option<value::Type>, &mut Vec<value::Type>) -> stack::ExecState, &'static str> {
 	match s.as_ref() {
 		"push" => Ok(instruction::push),
 		"pop" => Ok(instruction::pop),
@@ -85,7 +81,7 @@ fn parse_instruction (s : &String) -> Result<fn(Option<value::Type>, &mut Vec<va
 		"mod" => Ok(instruction::rem),
 		"print" => Ok(instruction::print),
 		"exit" => Ok(instruction::exit),
-		_ => Err(ParserError::ErrInst),
+		_ => Err(ERR_INST),
 	}
 }
 
@@ -112,51 +108,51 @@ fn parse_value_syntax (s : &str) -> ValFamily {
 }
 
 #[inline]
-fn parse_value (s : &String) -> Result<value::Type, ParserError> {
+fn parse_value (s : &String) -> Result<value::Type, &'static str> {
 	let v1 : Vec<&str> = s.matches("(").collect();
 	let v2 : Vec<&str> = s.matches(")").collect();
 	if let (1, 1) = (v1.len(), v2.len()) {
 			let tmp : Vec<&str> = s.split(")").collect();
 			let split : Vec<&str> = tmp[0].split("(").collect();
 			if split.len() != 2 {
-				return Err(ParserError::ErrValueSyntax)
+				return Err(ERR_VALUE_SYNTAX)
 			};
 			match (parse_value_type(&split[0]), parse_value_syntax(&split[1])) {
 				(ValType::Char, ValFamily::Integer) => {
 					match split[1].parse::<i8>() {
 						Ok(val) => return Ok(value::Type::Char(val)),
-						Err(_) => return Err(ParserError::ErrValueSyntax),
+						Err(_) => return Err(ERR_VALUE_SYNTAX),
 					}
 				},
 				(ValType::Short, ValFamily::Integer) => {
 					match split[1].parse::<i16>() {
 						Ok(val) => return Ok(value::Type::Short(val)),
-						Err(_) => return Err(ParserError::ErrValueSyntax),
+						Err(_) => return Err(ERR_VALUE_SYNTAX),
 					}
 				},
 				(ValType::Int, ValFamily::Integer) => {
 					match split[1].parse::<i32>() {
 						Ok(val) => return Ok(value::Type::Int(val)),
-						Err(_) => return Err(ParserError::ErrValueSyntax),
+						Err(_) => return Err(ERR_VALUE_SYNTAX),
 					}
 				},
 				(ValType::Float, ValFamily::Float) => {
 					match split[1].parse::<f32>() {
 						Ok(val) => return Ok(value::Type::Float(val)),
-						Err(_) => return Err(ParserError::ErrValueSyntax),
+						Err(_) => return Err(ERR_VALUE_SYNTAX),
 					}
 				},
 				(ValType::Double, ValFamily::Float) => {
 					match split[1].parse::<f64>() {
 						Ok(val) => return Ok(value::Type::Double(val)),
-						Err(_) => return Err(ParserError::ErrValueSyntax),
+						Err(_) => return Err(ERR_VALUE_SYNTAX),
 					}
 				},
-				(ValType::Char, ValFamily::Float) | (ValType::Short, ValFamily::Float) | (ValType::Int, ValFamily::Float) | (ValType::Float, ValFamily::Integer) | (ValType::Double, ValFamily::Integer) => return Err(ParserError::ErrValueSyntax),
-				(_, _) => return Err(ParserError::ErrValueType),
+				(ValType::Char, ValFamily::Float) | (ValType::Short, ValFamily::Float) | (ValType::Int, ValFamily::Float) | (ValType::Float, ValFamily::Integer) | (ValType::Double, ValFamily::Integer) => return Err(ERR_VALUE_SYNTAX),
+				(_, _) => return Err(ERR_VALUE_TYPE),
 			};
 	}
-	Err(ParserError::ErrValueSyntax)
+	Err(ERR_VALUE_SYNTAX)
 }
 
 #[inline]
@@ -195,7 +191,7 @@ fn generate_token(line : &str, line_nb : &u64) -> Token {
 					Err(e) => tok.vec_error.push(e),
 				}
 				if vec_splited.len() > 3 {
-					tok.vec_error.push(ParserError::ErrInstLexical);
+					tok.vec_error.push(ERR_INST_LEXICAL);
 				};
 			}
 	};
