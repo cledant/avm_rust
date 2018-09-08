@@ -46,9 +46,16 @@ fn are_tokens_corrects(vec_tok : &mut Vec<Token>, filename : &String) -> bool {
 			(Some(inst), None) => {
 				if ((inst as usize == instruction::push as usize) ||
 					(inst as usize == instruction::assert as usize)) &&  
-					(!tok.vec_error.contains(&ERR_VALUE_SYNTAX)) {
+					(!tok.vec_error.contains(&ERR_VALUE_SYNTAX) &&
+					!tok.vec_error.contains(&ERR_VALUE_TYPE)) {
 						tok.vec_error.push(ERR_INST_LEXICAL);
-				};
+				} else if (inst as usize != instruction::push as usize) &&
+					(inst as usize != instruction::assert as usize) &&
+					(tok.vec_error.contains(&ERR_VALUE_SYNTAX) ||
+					tok.vec_error.contains(&ERR_VALUE_TYPE)) {
+						tok.vec_error.clear();
+						tok.vec_error.push(ERR_INST_LEXICAL);
+				}
 			}
 			(Some(inst), Some(_)) => {
 				if (inst as usize != instruction::push as usize) &&
@@ -241,21 +248,18 @@ pub fn parse_from_stdin() -> Vec<Token> {
 	loop {
 		let mut buff = String::new();
 		match io::stdin().read_line(&mut buff) {
-			Ok(_) => {
+			Ok(n) => {
 				//check stdin exit pattern
 				buff = buff.trim().to_string();
-				if buff == ";;" {
+				if (n == 0) || (buff == ";;") {
 					break
 				}
 				//parsing input
 				let mut tmp_vec_tok = Vec::new();
 				tmp_vec_tok.push(generate_token(&buff.as_str(), &line));
-				match are_tokens_corrects(&mut tmp_vec_tok, &String::from("Stdin")) {
-					true => {
-						vec_tok.append(&mut tmp_vec_tok);
-						line = line + 1;
-					}
-					false => {}
+				if let true = are_tokens_corrects(&mut tmp_vec_tok, &String::from("Stdin")) {
+					vec_tok.append(&mut tmp_vec_tok);
+					line = line + 1;
 				}			
 			}
 			Err(_) => {
