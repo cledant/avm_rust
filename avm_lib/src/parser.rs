@@ -37,8 +37,34 @@ pub struct Token {
 }
 
 #[inline]
-fn are_tokens_corrects(_vec_tok : &Vec<Token>, _filename : &String) -> bool {
-	true
+fn are_tokens_corrects(vec_tok : &mut Vec<Token>, filename : &String) -> bool {
+	//checks correct association of value and instruction	
+	for tok in vec_tok.iter_mut() {
+		if tok.vec_error.contains(&ParserError::ErrInstLexical)  == true {
+			continue;
+		}
+		match (tok.inst, &tok.val) {
+			(Some(inst), None) => {
+				if inst as usize == instruction::push as usize | instruction::assert as usize {
+					tok.vec_error.push(ParserError::ErrInstLexical);
+				};
+			}
+			(Some(_), Some(_)) => tok.vec_error.push(ParserError::ErrInstLexical),
+			(_, _) => {}
+		};
+	}
+	//Display Error
+	let mut is_correct = true;
+	for tok in vec_tok.iter() {
+		for e in tok.vec_error.iter() {
+			is_correct = false;
+			println!("Error In file : {} at line {}\n\t{}", filename, tok.line_number, tok.line);
+			match e {
+				_ => println!("=> Shit happend"),
+			};
+		}
+	}
+	is_correct
 }
 
 #[inline]
@@ -184,7 +210,7 @@ fn generate_vec_token(content : &String, filename : &String) -> Option<Vec<Token
 		}
 		line_nb = line_nb + 1;
 	}
-	match are_tokens_corrects(&vec_tok, &filename) {
+	match are_tokens_corrects(&mut vec_tok, &filename) {
 		true => Some(vec_tok),
 		false => None,
 	}
