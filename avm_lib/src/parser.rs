@@ -148,7 +148,9 @@ fn parse_value (s : &String) -> Result<value::Type, &'static str> {
 						Err(_) => return Err(ERR_VALUE_SYNTAX),
 					}
 				},
-				(ValType::Char, ValFamily::Float) | (ValType::Short, ValFamily::Float) | (ValType::Int, ValFamily::Float) | (ValType::Float, ValFamily::Integer) | (ValType::Double, ValFamily::Integer) => return Err(ERR_VALUE_SYNTAX),
+				(ValType::Char, ValFamily::Float) | (ValType::Short, ValFamily::Float) |
+				(ValType::Int, ValFamily::Float) | (ValType::Float, ValFamily::Integer) |
+				(ValType::Double, ValFamily::Integer) => return Err(ERR_VALUE_SYNTAX),
 				(_, _) => return Err(ERR_VALUE_TYPE),
 			};
 	}
