@@ -45,11 +45,15 @@ fn are_tokens_corrects(vec_tok : &mut Vec<Token>, filename : &String) -> bool {
 		}
 		match (tok.inst, &tok.val) {
 			(Some(inst), None) => {
-				if inst as usize == instruction::push as usize | instruction::assert as usize {
+				if (inst as usize == instruction::push as usize) || (inst as usize == instruction::assert as usize) {
 					tok.vec_error.push(ParserError::ErrInstLexical);
 				};
 			}
-			(Some(_), Some(_)) => tok.vec_error.push(ParserError::ErrInstLexical),
+			(Some(inst), Some(_)) => {
+				if (inst as usize != instruction::push as usize) && (inst as usize != instruction::assert as usize) {
+					tok.vec_error.push(ParserError::ErrInstLexical);
+				};
+			}
 			(_, _) => {}
 		};
 	}
