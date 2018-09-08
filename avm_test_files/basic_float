@@ -1,0 +1,6 @@
+push float(21.21)
+  push  double(21.21)		;Nyu
+;nop nop
+add
+dump
+exit

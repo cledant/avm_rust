@@ -1,13 +1,16 @@
 use value;
 use stack;
 use instruction;
+use std::process;
 use std::fs;
+use std::io;
 
 pub static ERR_OPEN_FILE : &str = "IO Error : Failed to read file";
 pub static ERR_INST : &str = "Syntax Error : Invalid Instruction";
 pub static ERR_INST_LEXICAL : &str = "Lexical Error : Invalid Instruction Pattern";
 pub static ERR_VALUE_TYPE : &str = "Syntax Error : Invalid Value Type";
 pub static ERR_VALUE_SYNTAX : &str = "Syntax Error : Invalid Value Syntax";
+pub static ERR_IO_STDIN : &str = "IO Error : Failed to read stdin. Exiting";
 
 enum ValType {
 	Char,
@@ -171,7 +174,6 @@ fn generate_token(line : &str, line_nb : &u64) -> Token {
 		line_number : *line_nb,
 		vec_error : Vec::new(),
 	};
-
 	//setup line to be parsed
 	let v_str : Vec<&str> = line.trim().split(";").collect();
 	let mut iter = v_str[0].split_whitespace();
@@ -179,8 +181,8 @@ fn generate_token(line : &str, line_nb : &u64) -> Token {
 	while let Some(word) =  iter.next() {
 		vec_splited.push(String::from(word));
 	};
-
-	 match vec_splited.len() {
+	//Parsing input
+	match vec_splited.len() {
 		0 => { return tok; },
 		1 => {
 				match parse_instruction(&vec_splited[0]) {
@@ -234,7 +236,33 @@ pub fn parse_from_file(file : &String) -> Option<Vec<Token>> {
 }
 
 pub fn parse_from_stdin() -> Vec<Token> {
-	println!("From stdin");
-	let vec : Vec<Token> = Vec::new();
-	vec
+	let mut vec_tok : Vec<Token> = Vec::new();
+	let mut line : u64 = 1;
+	loop {
+		let mut buff = String::new();
+		match io::stdin().read_line(&mut buff) {
+			Ok(_) => {
+				//check stdin exit pattern
+				buff = buff.trim().to_string();
+				if buff == ";;" {
+					break
+				}
+				//parsing input
+				let mut tmp_vec_tok = Vec::new();
+				tmp_vec_tok.push(generate_token(&buff.as_str(), &line));
+				match are_tokens_corrects(&mut tmp_vec_tok, &String::from("Stdin")) {
+					true => {
+						vec_tok.append(&mut tmp_vec_tok);
+						line = line + 1;
+					}
+					false => {}
+				}			
+			}
+			Err(_) => {
+				println!("{}", ERR_IO_STDIN);
+				process::exit(1);
+			}
+		}
+	}
+	vec_tok
 }
