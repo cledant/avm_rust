@@ -7,7 +7,7 @@ pub static ERR_OPEN_FILE : &str = "IO Error : Failed to read file";
 pub static ERR_INST : &str = "Syntax Error : Invalid Instruction";
 pub static ERR_INST_LEXICAL : &str = "Lexical Error : Invalid Instruction Pattern";
 pub static ERR_VALUE_TYPE : &str = "Syntax Error : Invalid Value Type";
-pub static ERR_VALUE_SYNTAX : &str = "Syntax Error : Invalid Value";
+pub static ERR_VALUE_SYNTAX : &str = "Syntax Error : Invalid Value Syntax";
 
 enum ValType {
 	Char,
@@ -41,8 +41,9 @@ fn are_tokens_corrects(vec_tok : &mut Vec<Token>, filename : &String) -> bool {
 		}
 		match (tok.inst, &tok.val) {
 			(Some(inst), None) => {
-				if (inst as usize == instruction::push as usize) ||
-					(inst as usize == instruction::assert as usize) {
+				if ((inst as usize == instruction::push as usize) ||
+					(inst as usize == instruction::assert as usize)) &&  
+					(!tok.vec_error.contains(&ERR_VALUE_SYNTAX)) {
 						tok.vec_error.push(ERR_INST_LEXICAL);
 				};
 			}
@@ -99,10 +100,15 @@ fn parse_value_type (s : &str) -> ValType {
 
 #[inline]
 fn parse_value_syntax (s : &str) -> ValFamily {
-	let v : Vec<&str> = s.matches(".").collect();
+	let v : Vec<&str> = s.split(".").collect();
 	match v.len() {
-		0 => ValFamily::Integer,
-		1 => ValFamily::Float,
+		1 => ValFamily::Integer,
+		2 => {
+			match v[1].len() {
+				0 => ValFamily::None,
+				_ => ValFamily::Float,
+			}
+		},
 		_ => ValFamily::None,
 	}
 }
@@ -148,9 +154,8 @@ fn parse_value (s : &String) -> Result<value::Type, &'static str> {
 						Err(_) => return Err(ERR_VALUE_SYNTAX),
 					}
 				},
-				(ValType::Char, ValFamily::Float) | (ValType::Short, ValFamily::Float) |
-				(ValType::Int, ValFamily::Float) | (ValType::Float, ValFamily::Integer) |
-				(ValType::Double, ValFamily::Integer) => return Err(ERR_VALUE_SYNTAX),
+				(ValType::Char, _) | (ValType::Short, _) | (ValType::Int, _) |
+				(ValType::Float, _) | (ValType::Double, _) => return Err(ERR_VALUE_SYNTAX),
 				(_, _) => return Err(ERR_VALUE_TYPE),
 			};
 	}
@@ -192,7 +197,7 @@ fn generate_token(line : &str, line_nb : &u64) -> Token {
 					Ok(val) => tok.val = Some(val),
 					Err(e) => tok.vec_error.push(e),
 				}
-				if vec_splited.len() > 3 {
+				if vec_splited.len() > 2 {
 					tok.vec_error.push(ERR_INST_LEXICAL);
 				};
 			}
