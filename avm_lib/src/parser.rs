@@ -71,7 +71,7 @@ fn are_tokens_corrects(vec_tok : &mut Vec<Token>, filename : &String) -> bool {
 	for tok in vec_tok.iter() {
 		for e in tok.vec_error.iter() {
 			is_correct = false;
-			println!("Error In file : {} at line {}\n\t{}", filename, tok.line_number, tok.line);
+			println!("{} : Error at line {}\n\t{}", filename, tok.line_number, tok.line);
 			println!("=> {}", e);
 		}
 	}
