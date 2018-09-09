@@ -1,0 +1,4 @@
+push int32(500)
+push int32(500)
+mul
+dump

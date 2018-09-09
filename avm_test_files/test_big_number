@@ -1,0 +1,11 @@
+push double(50000000000.0)
+push double(50000000000.0)
+mul
+dump
+push double(10000000000000000000000000.0)
+div
+dump
+push double(0.00000000000000000000001)
+div
+dump
+exit

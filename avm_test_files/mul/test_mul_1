@@ -1,0 +1,12 @@
+push int8(10)
+push int16(500)
+mul
+assert int16(5000)
+push int32(50000)
+mul
+assert int32(250000000)
+push double(6000000.0)
+mul
+assert double(1500000000000000.0)
+dump
+exit

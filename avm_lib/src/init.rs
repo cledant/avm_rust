@@ -11,6 +11,7 @@ pub fn run(args : &Vec<String>) {
 	} else {
 		for file in args.iter().skip(1) {
 			if let Some(tok) = parser::parse_from_file(&file) {
+				println!("Running {} : ", file);
 				match stack::run(&tok) {
 					ExecState::Error(e) => println!("File : {} : {}", file, e),
 					_ => {},

@@ -1,0 +1,11 @@
+push int8(-123)
+push int16(-1230)
+push int32(-123000)
+push int8(50)
+push int16(1000)
+push int32(2000000)
+dump
+;push int8(1000)
+;push int16(500000)
+push int32(1000000000000000000000)
+exit

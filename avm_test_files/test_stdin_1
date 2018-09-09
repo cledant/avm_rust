@@ -1,0 +1,7 @@
+push int32(1000)
+push float(42.0)
+dump
+add
+dump
+exit
+;;

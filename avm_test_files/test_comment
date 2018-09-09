@@ -1,0 +1,10 @@
+push int32(50)		;comment
+push int8(50);comment
+push int16(50)   		;comment
+
+
+dump
+;comment
+  ;comment
+  		;comment
+exit

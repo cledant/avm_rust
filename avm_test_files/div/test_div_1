@@ -1,0 +1,6 @@
+push int8(-2)
+push double(0.000000000001)
+dump
+div
+dump
+exit

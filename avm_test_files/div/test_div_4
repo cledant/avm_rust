@@ -1,0 +1,6 @@
+push int32(-2)
+push float(100000.0)
+dump
+div
+dump
+exit

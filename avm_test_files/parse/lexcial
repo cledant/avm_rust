@@ -1,0 +1,3 @@
+push longint(32)
+assert longdouble(45.0)
+exit

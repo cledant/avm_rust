@@ -1,0 +1,9 @@
+push int8(20)
+print
+push int8(10)
+print
+push int8(10)
+print
+push int8(10)
+print
+exit

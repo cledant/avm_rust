@@ -1,0 +1,9 @@
+push int32(10000)
+push int32(250)
+push int32(500)
+dump
+sub
+dump
+sub
+dump
+exit

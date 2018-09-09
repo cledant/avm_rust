@@ -1,0 +1,9 @@
+push int8(82)
+print
+push int8(101)
+print
+push int8(81)
+print
+push int8(101)
+print
+exit

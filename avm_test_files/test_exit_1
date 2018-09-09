@@ -1,0 +1,5 @@
+push int32(-42)
+dump
+exit
+push int16(42)
+push int8(42)

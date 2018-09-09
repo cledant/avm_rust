@@ -1,0 +1,10 @@
+push float(42.0)
+push float(-42.0)
+push double(-42.0)
+push float(42)
+push float(42.)
+push float(42f0)
+push float(42\\0)
+push float(gg)
+push float(hh42.0)
+exit
