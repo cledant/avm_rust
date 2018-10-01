@@ -26,7 +26,7 @@ fn stack_push() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -34,7 +34,7 @@ fn stack_push() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -50,7 +50,7 @@ fn stack_failed_pop() {
         inst: Some(instruction::pop),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -58,7 +58,7 @@ fn stack_failed_pop() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -77,7 +77,7 @@ fn stack_failed_assert_1() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -85,7 +85,7 @@ fn stack_failed_assert_1() {
         inst: Some(instruction::assert),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -93,7 +93,7 @@ fn stack_failed_assert_1() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -112,7 +112,7 @@ fn stack_failed_assert_2() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -120,7 +120,7 @@ fn stack_failed_assert_2() {
         inst: Some(instruction::assert),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -128,7 +128,7 @@ fn stack_failed_assert_2() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -147,7 +147,7 @@ fn stack_dump() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -155,7 +155,7 @@ fn stack_dump() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -163,7 +163,7 @@ fn stack_dump() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -171,7 +171,7 @@ fn stack_dump() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -179,7 +179,7 @@ fn stack_dump() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -187,7 +187,7 @@ fn stack_dump() {
         inst: Some(instruction::dump),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -195,7 +195,7 @@ fn stack_dump() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -211,7 +211,7 @@ fn stack_pop() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -219,7 +219,7 @@ fn stack_pop() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -227,7 +227,7 @@ fn stack_pop() {
         inst: Some(instruction::pop),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -235,7 +235,7 @@ fn stack_pop() {
         inst: Some(instruction::assert),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -243,7 +243,7 @@ fn stack_pop() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -259,7 +259,7 @@ fn stack_add_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -267,7 +267,7 @@ fn stack_add_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -275,7 +275,7 @@ fn stack_add_assert() {
         inst: Some(instruction::add),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -283,7 +283,7 @@ fn stack_add_assert() {
         inst: Some(instruction::assert),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -291,7 +291,7 @@ fn stack_add_assert() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -307,7 +307,7 @@ fn stack_sub_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -315,7 +315,7 @@ fn stack_sub_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -323,7 +323,7 @@ fn stack_sub_assert() {
         inst: Some(instruction::sub),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -331,7 +331,7 @@ fn stack_sub_assert() {
         inst: Some(instruction::assert),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -339,7 +339,7 @@ fn stack_sub_assert() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -355,7 +355,7 @@ fn stack_mul_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -363,7 +363,7 @@ fn stack_mul_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -371,7 +371,7 @@ fn stack_mul_assert() {
         inst: Some(instruction::mul),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -379,7 +379,7 @@ fn stack_mul_assert() {
         inst: Some(instruction::assert),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -387,7 +387,7 @@ fn stack_mul_assert() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -403,7 +403,7 @@ fn stack_div_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -411,7 +411,7 @@ fn stack_div_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -419,7 +419,7 @@ fn stack_div_assert() {
         inst: Some(instruction::div),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -427,7 +427,7 @@ fn stack_div_assert() {
         inst: Some(instruction::assert),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -435,7 +435,7 @@ fn stack_div_assert() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -451,7 +451,7 @@ fn stack_rem_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -459,7 +459,7 @@ fn stack_rem_assert() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -467,7 +467,7 @@ fn stack_rem_assert() {
         inst: Some(instruction::rem),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -475,7 +475,7 @@ fn stack_rem_assert() {
         inst: Some(instruction::assert),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -483,7 +483,7 @@ fn stack_rem_assert() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -499,7 +499,7 @@ fn stack_print_1() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -507,7 +507,7 @@ fn stack_print_1() {
         inst: Some(instruction::print),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -515,7 +515,7 @@ fn stack_print_1() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -523,7 +523,7 @@ fn stack_print_1() {
         inst: Some(instruction::print),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -531,7 +531,7 @@ fn stack_print_1() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -547,7 +547,7 @@ fn stack_print_2() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -555,7 +555,7 @@ fn stack_print_2() {
         inst: Some(instruction::print),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -563,7 +563,7 @@ fn stack_print_2() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -571,7 +571,7 @@ fn stack_print_2() {
         inst: Some(instruction::print),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -579,7 +579,7 @@ fn stack_print_2() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
@@ -595,7 +595,7 @@ fn stack_failed_print() {
         inst: Some(instruction::push),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -603,7 +603,7 @@ fn stack_failed_print() {
         inst: Some(instruction::print),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     let tok = Token {
@@ -611,7 +611,7 @@ fn stack_failed_print() {
         inst: Some(instruction::exit),
         line: String::from("empty"),
         line_number: 0,
-		vec_error: vec![], 
+        vec_error: vec![],
     };
     vec_tok.push(tok);
     //Test
