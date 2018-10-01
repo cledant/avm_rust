@@ -1,9 +1,9 @@
 extern crate avm_lib;
 
-use std::env;
 use avm_lib::init;
+use std::env;
 
 fn main() {
-	let args : Vec<String> = env::args().collect();
-	init::run(&args);
+    let args: Vec<String> = env::args().collect();
+    init::run(&args);
 }
